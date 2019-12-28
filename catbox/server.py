@@ -95,8 +95,10 @@ class Server():
 
     def load_games(self):
         """ Load all locally installed games """
-        path = Path("./games/")
+        path = Path("games")
         for gmod in path.iterdir():
+            if gmod.is_file() or "__pycache__" in gmod.name:
+                continue
             name = ""
             with gmod.joinpath("config.yml").open("r") as f:
                 config = yaml.load(f.read())

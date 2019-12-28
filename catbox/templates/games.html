@@ -8,7 +8,7 @@
 
   <body>
     {% for game_name in games %}
-    <p><a href="{{ game_name }}">{{ game_name }}</a></p>
-    {% endif %}
+    <p><a href="/games/{{ game_name }}">{{ game_name }}</a></p>
+    {% endfor %}
   </body>
 </html>
