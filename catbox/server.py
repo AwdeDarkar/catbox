@@ -17,9 +17,11 @@ Management of an instance of the server, allows creating and managing games.
 """
 
 import sys
+import yaml
 import logging
 import string
 import random
+from pathlib import Path
 
 from flask import Flask, render_template, request
 from flask_socketio import SocketIO
@@ -37,6 +39,7 @@ class Server():
         self.app = app
         self.socketio = socketio
         self.client_sids = []
+        self.installed = {}
 
         self.games = {}  # associate room codes with game instances
 
@@ -90,12 +93,24 @@ class Server():
         logging.debug("Emitting %s to %s", event, sid)
         self.socketio.emit(event, data, room=sid)
 
+    def load_games(self):
+        """ Load all locally installed games """
+        path = Path("./games/")
+        for gmod in path.iterdir():
+            name = ""
+            with gmod.joinpath("config.yml").open("r") as f:
+                config = yaml.load(f.read())
+                name = config["name"]
+            self.installed[name] = __import__("games.%s" % gmod.name)
+
 
 def init_logger():
     # what loggers do we have?
-    # for key in logging.Logger.manager.loggerDict:
-        # print(key)
-    
+    """
+    for key in logging.Logger.manager.loggerDict:
+        print(key)
+    """
+
     # mute some things
     logging.getLogger('socketio').setLevel(logging.CRITICAL)
     logging.getLogger('socketio.client').setLevel(logging.CRITICAL)
