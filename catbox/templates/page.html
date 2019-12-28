@@ -5,15 +5,38 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script type="text/javascript" src="/static/js/socketio/socket.io.dev.js"></script>
     <script type="text/javascript" src="/static/js/catbox.js"></script>
+    <link rel="stylesheet" type="text/css" href="static/css/style.css">
   </head>
-  <body>
 
-	<!-- connection form -->
-    <form id="connection_form" action="" onsubmit="event.preventDefault(); ConnectionFormHandler()" method="POST">
-      <input type="text" id="connection_username" placeholder="Username"/>
-      <input type="text" id="connection_code" placeholder="Room code"/>
-      <input type="submit"/>
-    </form>
+  <body>
+  <table class="content-master">
+    <tr class="content-title">
+      <td>
+        catbox
+      </td>
+    </tr>
+    	<!-- connection form -->
+      <tr class="content-form">
+      <form id="connection_form" action="" onsubmit="event.preventDefault(); ConnectionFormHandler()" method="POST">
+        <td>
+          Enter your username:
+          <input type="text" id="connection_username" placeholder="Username"/>
+        </td>
+      </tr>
+      <tr class="content-form">
+        <td>
+          Enter the room code:
+          <input type="text" id="connection_code" placeholder="Room code"/>
+        </td>
+      </tr>
+      <tr class="content-button">
+        <td>
+          <input class="content-submit" type="submit"/>
+          </form>
+        </td>
+      </tr>
+
+  </table>
 
   </body>
 </html>
