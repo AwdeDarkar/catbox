@@ -38,6 +38,7 @@ class Server():
 
         self.socketio.on_event("connect", self.handle_connect)
         self.socketio.on_event("disconnect", self.handle_disconnect)
+        self.socketio.on_event("join", self.handle_join)
 
         logging.info("Server initialized")
 
@@ -70,6 +71,11 @@ class Server():
         """ Allow clients to disconnect from the server """
         logging.info("Client %s disconnected", request.sid)
         self.client_sids.remove(request.sid)
+
+    def handle_join(self, json):
+        """ Connect a client with a game """
+        logging.info("User '%s' (name '%s') requesting to join room '%s'", request.sid, json["username"], json["code"])
+        
 
     def communicate(self, sid, event, data):
         """ Sends the event and data to the client with the sid """
