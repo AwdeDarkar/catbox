@@ -14,6 +14,7 @@ function ConnectSocket () {
 }
 
 function ConnectionFormHandler (e) {
+	console.log("FORM SUBMISSION")
     e.preventDefault()
     var code = $("#connection_code").val()
     var username = $("#connection_code").val()
@@ -26,7 +27,7 @@ function ConnectionFormHandler (e) {
 function OnPageLoad () { // eslint-disable-line no-unused-vars
 	console.log("Hello world!");
     ConnectSocket()
-    var form = $("#connection_form").on("submit", ConnectionFormHandler)
+    $("#connection_form").on("submit", ConnectionFormHandler)
     $("#connection_username").val("").focus()
 }
 
