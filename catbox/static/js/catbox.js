@@ -13,6 +13,7 @@ function ConnectSocket () {
     // TODO: error handling if connection goes wrong?
 	
 	socket.on("clear page", ClearPage)
+	socket.on("display", DisplayHTML)
 }
 
 function ConnectionFormHandler () {
@@ -35,6 +36,13 @@ function OnPageLoad () { // eslint-disable-line no-unused-vars
 function ClearPage () {
 	console.log("Clearing page")
 	document.body.innerHTML = ""
+	// TODO: maybe have this also create a content div that everything actually
+	// goes in
+}
+
+function DisplayHTML (data) {
+	console.log(data)
+	document.body.innerHTML = data.html
 }
 
 console.log("hello?");

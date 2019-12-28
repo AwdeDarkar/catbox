@@ -56,8 +56,9 @@ class Game():
         else:
             logging.info("New player added")
             self.players[username] = sid
+            
             self.send(username, "clear page", {})
-            # TODO: send event to clients?
+            self.send_html(username, "<h1>Welcome to " + self.code + " " + username + "</h1>")
 
     def find_username(self, sid):
         """ Get the user with the passed SID """
@@ -69,7 +70,6 @@ class Game():
                 logging.error("Username for SID %s not found", sid)
                 return None
             
-
     def broadcast(self, event, data, include_table=True):
         """ Send an event and possibly a table to all players """
         logging.info("Broadcasting %s", event)
@@ -98,7 +98,7 @@ class Game():
                 self.server.communicate(self.players[username], event, data)
 
     def send_table(self, event, data):
-        """ Send an HTML table to a player """
+        """ Send message to table display """
         logging.info("Sending to TABLE: %s", event)
         logging.debug("Send data - %s", data)
 
@@ -108,6 +108,10 @@ class Game():
             logging.error("No table connected!")
             # TODO: add to queue?
             pass
+
+    def send_html(self, username, html):
+        """ Sends raw html to display to the specified user """
+        self.send(username, "display", {"html":html})
 
     def handle_message(self, username, data):
         """ Receive message from connected client (from username) """
