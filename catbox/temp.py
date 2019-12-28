@@ -14,7 +14,9 @@ def connect():
 @socketio.on('disconnect')
 def disconnect():
     client_sids.remove(request.sid)
+    # TODO: remove sid from game connected to
 
 
+# TODO: this should be in some class if possible?
 def communicate(sid, event, data):
     socketio.emit(event, data, room=sid)
