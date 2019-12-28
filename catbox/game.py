@@ -116,3 +116,7 @@ class Game():
     def handle_message(self, username, data):
         """ Receive message from connected client (from username) """
         logging.debug("Message receieved from %s : $s", username, data)
+
+    def game_loop(self):
+        """ The main game loop function called by an external timer thread """
+        logging.debug("Game tick")

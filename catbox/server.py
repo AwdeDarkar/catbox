@@ -21,12 +21,20 @@ import yaml
 import logging
 import string
 import random
+import threading
+import time
 from pathlib import Path
 
 from flask import Flask, render_template, request
 from flask_socketio import SocketIO
 
 import game
+
+
+def game_tick(game, rest_time):
+    while True:
+        time.sleep(rest_time)
+        game.game_loop()
 
 
 class Server():
@@ -62,6 +70,10 @@ class Server():
         self.games[code] = game
         game.server = self
         game.code = code
+
+        logging.info("Creating game timer for game loop...")
+        game_timer_thread = threading.Thread(target=game_tick, args=(game, 1))
+        game_timer_thread.start()
 
         logging.info("Game with code %s created", code)
 
