@@ -74,9 +74,9 @@ class Server():
         logging.info("Client %s disconnected", request.sid)
         self.client_sids.remove(request.sid)
 
-    def handle_join(self, json):
+    def handle_join(self, data):
         """ Connect a client with a game """
-        logging.info("User '%s' (name '%s') requesting to join room '%s'", request.sid, json["username"], json["code"])
+        logging.info("User '%s' (name '%s') requesting to join room '%s'", request.sid, data["username"], data["code"])
         
 
     def communicate(self, sid, event, data):
@@ -126,15 +126,15 @@ def connect():
 @socketio.on('disconnect')
 def disconnect():
     # clients.remove(request.namespace)
+    logging.debug("Flask socket server received disconnect event")
     server.handle_disconnect(request)
 
 
+@socketio.on('join')
+def join(data):
+    logging.debug("Flask socket server received join event %s", data)
+    server.handle_join(data)
 
-#self.socketio.on_event("connect", self.handle_connect)
-#self.socketio.on_event("disconnect", self.handle_disconnect)
-#self.socketio.on_event("join", self.handle_join)
-
-        
         
 if __name__ == '__main__':
     socketio.run(app, debug=True)
