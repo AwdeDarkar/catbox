@@ -28,12 +28,15 @@ class Server():
     def __init__(self, socketio):
         self.socketio = socketio
         self.client_sids = []
+        
             
     def handle_connect(self, request):
         self.client_sids.append(request.sid)
+        
     
     def handle_disconnect(self, request):
         self.client_sids.remove(request.sid)
+        
         
     def communicate(sid, event, data):
         self.socketio.emit(event, data, room=sid)
