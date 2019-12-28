@@ -80,8 +80,9 @@ class Server():
         """ Connect a client with a game """
         username = data["username"]
         code = data["code"]
-        
-        logging.info("User '%s' (name '%s') requesting to join room '%s'", request.sid, username, code)
+
+        logging.info("User '%s' (name '%s') requesting to join room '%s'", request.sid, username,
+                     code)
         if code not in self.games.keys():
             logging.error("Room %s does not exist", code)
             self.communicate(request.sid, "join error", {"msg": "Room does not exist"})
@@ -98,7 +99,7 @@ def init_logger():
     # what loggers do we have?
     for key in logging.Logger.manager.loggerDict:
         print(key)
-    
+
     # mute some things
     logging.getLogger('socketio').setLevel(logging.CRITICAL)
     logging.getLogger('socketio.client').setLevel(logging.CRITICAL)
@@ -106,7 +107,7 @@ def init_logger():
     logging.getLogger('engineio.server').setLevel(logging.CRITICAL)
     logging.getLogger('engineio.client').setLevel(logging.CRITICAL)
     logging.getLogger('engineio').setLevel(logging.CRITICAL)
-    
+
     log_formatter = logging.Formatter(
             "%(asctime)s - %(filename)s - %(levelname)s - %(message)s"
             )
@@ -117,7 +118,7 @@ def init_logger():
     console_handler.setFormatter(log_formatter)
     root_logger.addHandler(console_handler)
 
-    
+
 init_logger()
 app = Flask(__name__, instance_relative_config=True)
 app.config.from_mapping(
@@ -130,6 +131,12 @@ server = Server(app, socketio)
 @app.route('/hello')
 def hello():
     return 'Hello, World!'
+
+
+@app.route('/games')
+def games_launcher():
+    """ List of all installed games which may be launched """
+    pass
 
 
 @app.route('/')
