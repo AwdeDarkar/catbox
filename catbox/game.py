@@ -27,9 +27,8 @@ import logging
 class Game():
     """ Core game class """
 
-    def __init__(self, server):
-        self.server = server
-
+    def __init__(self):
+        self.server = None
         self.code = "AAAA"
         self.players = {}
 
