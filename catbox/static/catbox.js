@@ -13,9 +13,8 @@ function ConnectSocket () {
     // TODO: error handling if connection goes wrong?
 }
 
-function ConnectionFormHandler (e) {
+function ConnectionFormHandler () {
 	console.log("FORM SUBMISSION")
-    e.preventDefault()
     var code = $("#connection_code").val()
     var username = $("#connection_code").val()
     socket.emit("join", {
@@ -27,7 +26,7 @@ function ConnectionFormHandler (e) {
 function OnPageLoad () { // eslint-disable-line no-unused-vars
 	console.log("Hello world!");
     ConnectSocket()
-    $("#connection_form").on("submit", ConnectionFormHandler)
+    //$("#connection_form").on("submit", ConnectionFormHandler)
     $("#connection_username").val("").focus()
 }
 

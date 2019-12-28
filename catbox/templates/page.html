@@ -9,7 +9,7 @@
   <body>
 	
 	<!-- connection form -->
-    <form id="connection_form" action="" method="POST">
+    <form id="connection_form" action="" onsubmit="event.preventDefault(); ConnectionFormHandler()" method="POST">
       <input type="text" id="connection_username" placeholder="Username"/>
       <input type="text" id="connection_code" placeholder="Room code"/>
       <input type="submit"/>
