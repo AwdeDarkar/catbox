@@ -147,7 +147,9 @@ def hello():
 @app.route('/games')
 def games_launcher():
     """ List of all installed games which may be launched """
-    pass
+    if not server.installed:
+        server.load_games()
+    return render_template("games.html", games=list(server.installed.keys()))
 
 
 @app.route('/')
