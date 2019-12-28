@@ -76,8 +76,15 @@ class Server():
 
     def handle_join(self, data):
         """ Connect a client with a game """
-        logging.info("User '%s' (name '%s') requesting to join room '%s'", request.sid, data["username"], data["code"])
+        username = data["username"]
+        code = data["code"]
         
+        logging.info("User '%s' (name '%s') requesting to join room '%s'", request.sid, username, code)
+        if code not in self.games.keys():
+            logging.error("Room %s does not exist", code)
+            communicate(request.sid, "join error", {"msg": "Room does not exist"})
+        else:
+            self.games[code].add_player(username, request.sid)
 
     def communicate(self, sid, event, data):
         """ Sends the event and data to the client with the sid """
