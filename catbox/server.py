@@ -84,7 +84,7 @@ class Server():
         logging.info("User '%s' (name '%s') requesting to join room '%s'", request.sid, username, code)
         if code not in self.games.keys():
             logging.error("Room %s does not exist", code)
-            communicate(request.sid, "join error", {"msg": "Room does not exist"})
+            self.communicate(request.sid, "join error", {"msg": "Room does not exist"})
         else:
             self.games[code].add_player(username, request.sid)
 
@@ -95,6 +95,18 @@ class Server():
 
 
 def init_logger():
+    # what loggers do we have?
+    for key in logging.Logger.manager.loggerDict:
+        print(key)
+    
+    # mute some things
+    logging.getLogger('socketio').setLevel(logging.CRITICAL)
+    logging.getLogger('socketio.client').setLevel(logging.CRITICAL)
+    logging.getLogger('socketio.server').setLevel(logging.CRITICAL)
+    logging.getLogger('engineio.server').setLevel(logging.CRITICAL)
+    logging.getLogger('engineio.client').setLevel(logging.CRITICAL)
+    logging.getLogger('engineio').setLevel(logging.CRITICAL)
+    
     log_formatter = logging.Formatter(
             "%(asctime)s - %(filename)s - %(levelname)s - %(message)s"
             )
@@ -157,4 +169,4 @@ def join(data):
 
 create_game() # TODO: just for debugging
 if __name__ == '__main__':
-    socketio.run(app, debug=True)
+    socketio.run(app, debug=False)
