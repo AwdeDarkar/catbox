@@ -26,7 +26,7 @@ function ConnectionFormHandler (e) {
 function OnPageLoad () { // eslint-disable-line no-unused-vars
 	console.log("Hello world!");
     ConnectSocket()
-    var form = $("connection_form").on("submit", ConnectionFormHandler)
+    var form = $("#connection_form").on("submit", ConnectionFormHandler)
     $("#connection_username").val("").focus()
 }
 
