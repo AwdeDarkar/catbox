@@ -56,6 +56,7 @@ class Game():
         else:
             logging.info("New player added")
             self.players[username] = sid
+            self.send(username, "clear page", {})
             # TODO: send event to clients?
 
     def find_username(self, sid):
