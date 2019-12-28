@@ -7,8 +7,8 @@ import logging
 
 class Game():
 
-    def __init__(self, server):
-        self.server = server
+    def __init__(self):
+        self.server = None
         
         self.code = "AAAA"
         self.players = {}
