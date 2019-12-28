@@ -42,7 +42,7 @@ class Game():
         TODO: if someone disconnects set their sid to None
         """
         logging.info("Player add requested with username '%s' and sid '%s'", username, sid)
-        
+
         if username in self.players.keys():
             if self.players[username] is not None:
                 logging.error("Username is already taken and player still connected")
@@ -55,22 +55,22 @@ class Game():
             logging.info("New player added")
             self.players[username] = sid
             # TODO: send event to clients?
-            
+
     def broadcast(self, event, data, include_table=True):
         """ Send an event and possibly a table to all players """
         logging.info("Broadcasting %s", event)
         logging.debug("Broadcast data - %s", data)
-        
+
         if include_table:
-            self.send_table(event, data) 
+            self.send_table(event, data)
         for player in self.players:
             self.send(player, event, data)
-            
+
     def send(self, username, event, data):
         """ Send an event and data to a player """
         logging.info("Sending to '%s': %s", username, event)
         logging.debug("Send data - %s", data)
-        
+
         if username not in self.players.keys():
             logging.error("User %s not found", username)
             # TODO: error
@@ -87,7 +87,7 @@ class Game():
         """ Send an HTML table to a player """
         logging.info("Sending to TABLE: %s", event)
         logging.debug("Send data - %s", data)
-        
+
         if self.table_sid is not None:
             self.server.communicate(self.table_sid, event, data)
         else:
