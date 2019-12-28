@@ -6,3 +6,9 @@ __pycache__/
 # Flask
 instance/
 .webassets-cache
+
+# Node.js
+node_modules/
+package.json
+package-lock.json
+.eslintrc.yml
