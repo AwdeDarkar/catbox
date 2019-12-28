@@ -34,6 +34,8 @@ class Server():
 
         self.games = {} # associate room codes with game instances (also namepace should be the code?)
 
+        logging.info("Server initialized")
+
     def create_code(self):
         for i in range(0, 4):
             code += random.choice(string.ascii_letters)
@@ -42,17 +44,23 @@ class Server():
         # search for unused code
         code = create_code()
         while code in self.games.keys():
+            logging.debug("Code %s in use, regenerating", code)
             code = create_code()
         
         self.games[code] = game
         game.server = self
         game.code = code
+
+        logging.info("Game with code %s created", code)
         
     def handle_connect(self, request):
+        logging.info("Client %s connected", request.sid)
         self.client_sids.append(request.sid)
         
     def handle_disconnect(self, request):
+        logging.info("Client %s disconnected", request.sid)
         self.client_sids.remove(request.sid)
         
     def communicate(sid, event, data):
+        logging.debug("Emitting %s to %s", event, sid)
         self.socketio.emit(event, data, room=sid)
