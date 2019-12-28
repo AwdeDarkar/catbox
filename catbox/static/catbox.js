@@ -4,9 +4,6 @@
  * Core catbox js library
  */
 
-var $ = require("jquery")
-var io = require("socket.io")
-
 var socket
 var connected = false // eslint-disable-line no-unused-vars
 
