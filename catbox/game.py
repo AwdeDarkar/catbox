@@ -33,6 +33,8 @@ class Game():
         self.players = {}
 
         self.table_sid = None
+        
+        logging.info("Game initialized")
 
     def add_player(self, username, sid):
         """

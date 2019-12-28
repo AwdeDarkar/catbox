@@ -24,6 +24,8 @@ import random
 from flask import Flask, render_template, request
 from flask_socketio import SocketIO
 
+import game
+
 
 class Server():
     """ Core server class """
@@ -123,6 +125,16 @@ def landing():
     return render_template("page.html")
 
 
+@app.route("/create-game")
+def create_game():
+    logging.info("Game creation requested")
+    testgame = game.Game()
+    testgame.server = server
+    server.register_game(testgame)
+    logging.info("Game created")
+    return "Game created " + testgame.code
+
+
 @socketio.on('connect')
 def connect():
     # clients.append(request.namespace)
@@ -142,6 +154,7 @@ def join(data):
     logging.debug("Flask socket server received join event %s", data)
     server.handle_join(data)
 
-        
+
+create_game() # TODO: just for debugging
 if __name__ == '__main__':
     socketio.run(app, debug=True)
