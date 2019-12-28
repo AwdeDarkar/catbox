@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Installed Games</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="static/css/style.css">
+  </head>
+
+  <body>
+    {% for game_name in games %}
+    <p><a href="{{ game_name }}">{{ game_name }}</a></p>
+    {% endif %}
+  </body>
+</html>
