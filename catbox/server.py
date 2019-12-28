@@ -17,9 +17,11 @@ Management of an instance of the server, allows creating and managing games.
 """
 
 import sys
+import yaml
 import logging
 import string
 import random
+from pathlib import Path
 
 from flask import Flask, render_template, request
 from flask_socketio import SocketIO
@@ -37,6 +39,7 @@ class Server():
         self.app = app
         self.socketio = socketio
         self.client_sids = []
+        self.installed = {}
 
         self.games = {}  # associate room codes with game instances
 
@@ -76,8 +79,9 @@ class Server():
         """ Connect a client with a game """
         username = data["username"]
         code = data["code"]
-        
-        logging.info("User '%s' (name '%s') requesting to join room '%s'", request.sid, username, code)
+
+        logging.info("User '%s' (name '%s') requesting to join room '%s'", request.sid, username,
+                     code)
         if code not in self.games.keys():
             logging.error("Room %s does not exist", code)
             self.communicate(request.sid, "join error", {"msg": "Room does not exist"})
@@ -89,12 +93,24 @@ class Server():
         logging.debug("Emitting %s to %s", event, sid)
         self.socketio.emit(event, data, room=sid)
 
+    def load_games(self):
+        """ Load all locally installed games """
+        path = Path("./games/")
+        for gmod in path.iterdir():
+            name = ""
+            with gmod.joinpath("config.yml").open("r") as f:
+                config = yaml.load(f.read())
+                name = config["name"]
+            self.installed[name] = __import__("games.%s" % gmod.name)
+
 
 def init_logger():
     # what loggers do we have?
-    # for key in logging.Logger.manager.loggerDict:
-        # print(key)
-    
+    """
+    for key in logging.Logger.manager.loggerDict:
+        print(key)
+    """
+
     # mute some things
     logging.getLogger('socketio').setLevel(logging.CRITICAL)
     logging.getLogger('socketio.client').setLevel(logging.CRITICAL)
@@ -102,7 +118,7 @@ def init_logger():
     logging.getLogger('engineio.server').setLevel(logging.CRITICAL)
     logging.getLogger('engineio.client').setLevel(logging.CRITICAL)
     logging.getLogger('engineio').setLevel(logging.CRITICAL)
-    
+
     log_formatter = logging.Formatter(
             "%(asctime)s - %(filename)s - %(levelname)s - %(message)s"
             )
@@ -113,7 +129,7 @@ def init_logger():
     console_handler.setFormatter(log_formatter)
     root_logger.addHandler(console_handler)
 
-    
+
 init_logger()
 app = Flask(__name__, instance_relative_config=True)
 app.config.from_mapping(
@@ -126,6 +142,12 @@ server = Server(app, socketio)
 @app.route('/hello')
 def hello():
     return 'Hello, World!'
+
+
+@app.route('/games')
+def games_launcher():
+    """ List of all installed games which may be launched """
+    pass
 
 
 @app.route('/')
@@ -183,6 +205,6 @@ def game_msg(data):
     server.games[room].handle_message(username, data["data"])
 
 
-create_game() # TODO: just for debugging
+create_game()  # TODO: just for debugging
 if __name__ == '__main__':
     socketio.run(app, debug=False)

@@ -40,12 +40,22 @@ td {
 }
 
 .content-submit {
+  background-color: var(--title-color);
+  color: var(--button-color);
+  border: none;
+  width: 60%;
+  height: 80%;
+  font-size: 64px;
+}
+
+.content-submit:hover {
   background-color: var(--button-color);
   color: var(--title-color);
   border: none;
   width: 60%;
   height: 80%;
   font-size: 64px;
+  cursor: pointer;
 }
 
 input[type="text"]
