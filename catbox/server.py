@@ -40,10 +40,6 @@ class Server():
 
         self.games = {}  # associate room codes with game instances
 
-        # self.socketio.on_event("connect", self.handle_connect)
-        # self.socketio.on_event("disconnect", self.handle_disconnect)
-        # self.socketio.on_event("join", self.handle_join)
-
         logging.info("Server initialized")
 
     def create_code(self):
@@ -97,9 +93,9 @@ class Server():
 
 def init_logger():
     # what loggers do we have?
-    for key in logging.Logger.manager.loggerDict:
-        print(key)
-
+    # for key in logging.Logger.manager.loggerDict:
+        # print(key)
+    
     # mute some things
     logging.getLogger('socketio').setLevel(logging.CRITICAL)
     logging.getLogger('socketio.client').setLevel(logging.CRITICAL)
@@ -174,6 +170,26 @@ def join(data):
     server.handle_join(data)
 
 
-create_game() # TODO: just for debugging
+@socketio.on('game msg')
+def game_msg(data):
+    logging.debug("Flask socket server received game message", data)
+    room = data["room"]
+
+    # check room exists
+    if room not in server.games:
+        logging.error("Room %s does not exist", room)
+        # TODO: send error back
+        return
+
+    # check username exists
+    username = server.games[room].find_username(request.sid)
+    if username is None:
+        # TODO: send error back
+        return
+
+    server.games[room].handle_message(username, data["data"])
+
+
+create_game()  # TODO: just for debugging
 if __name__ == '__main__':
     socketio.run(app, debug=False)

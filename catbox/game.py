@@ -58,6 +58,17 @@ class Game():
             self.players[username] = sid
             # TODO: send event to clients?
 
+    def find_username(self, sid):
+        """ Get the user with the passed SID """
+
+        for key, value in self.players.items():
+            if value == sid:
+                return key
+            else:
+                logging.error("Username for SID %s not found", sid)
+                return None
+            
+
     def broadcast(self, event, data, include_table=True):
         """ Send an event and possibly a table to all players """
         logging.info("Broadcasting %s", event)
@@ -96,3 +107,7 @@ class Game():
             logging.error("No table connected!")
             # TODO: add to queue?
             pass
+
+    def handle_message(self, username, data):
+        """ Receive message from connected client (from username) """
+        logging.debug("Message receieved from %s : $s", username, data)
