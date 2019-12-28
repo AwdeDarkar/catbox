@@ -23,6 +23,7 @@ import string
 import random
 import threading
 import time
+import importlib
 from pathlib import Path
 
 from flask import Flask, render_template, request
@@ -115,7 +116,8 @@ class Server():
             with gmod.joinpath("config.yml").open("r") as f:
                 config = yaml.load(f.read())
                 name = config["name"]
-            self.installed[name] = __import__("games.%s" % gmod.name)
+            self.installed[name] = importlib.import_module("games.%s.game" % gmod.name)
+            print(self.installed[name])
 
 
 def init_logger():
@@ -158,6 +160,16 @@ def hello():
     return 'Hello, World!'
 
 
+@app.route('/games/<name>')
+def create_game(name):
+    logging.info("Game creation requested")
+    newgame = server.installed[name].game.Game()
+    newgame.server = server
+    server.register_game(newgame)
+    logging.info("Game %s created", name)
+    return "Game created " + newgame.code
+
+
 @app.route('/games')
 def games_launcher():
     """ List of all installed games which may be launched """
@@ -169,16 +181,6 @@ def games_launcher():
 @app.route('/')
 def landing():
     return render_template("page.html")
-
-
-@app.route("/create-game")
-def create_game():
-    logging.info("Game creation requested")
-    testgame = game.Game()
-    testgame.server = server
-    server.register_game(testgame)
-    logging.info("Game created")
-    return "Game created " + testgame.code
 
 
 @socketio.on('connect')
@@ -221,6 +223,5 @@ def game_msg(data):
     server.games[room].handle_message(username, data["data"])
 
 
-create_game()  # TODO: just for debugging
 if __name__ == '__main__':
     socketio.run(app, debug=False)
