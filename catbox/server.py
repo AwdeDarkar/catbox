@@ -52,7 +52,7 @@ class Server():
 
         # search for unused code TODO find a non-evil way of doing this
         code = self.create_code()
-        while code in self.games.keys():
+        while code in self.games:
             logging.debug("Code %s in use, regenerating", code)
             code = self.create_code()
 
