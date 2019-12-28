@@ -21,7 +21,8 @@ import logging
 
 from flask import Flask, render_template
 
-from . import server
+# from . import server
+import server
 
 
 def init_logger():
@@ -68,3 +69,7 @@ def create_app(test_config=None):
     game_server.socketio.run(app, debug=True)
 
     return app
+
+
+if __name__ == '__main__':
+    create_app()
