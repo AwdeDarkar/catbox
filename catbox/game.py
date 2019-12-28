@@ -29,7 +29,7 @@ class Game():
 
     def __init__(self):
         self.server = None
-        self.code = "AAAA"
+        self.code = None
         self.players = {}
 
         self.table_sid = None
