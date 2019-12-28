@@ -17,14 +17,25 @@ Setup script for catbox app
 """
 
 import os
+import logging
 
-from flask import Flask
+from flask import Flask, render_template
 
 from . import server
 
 
+def init_logger():
+    log_formatter = logging.Formatter(
+            "%(asctime)s - %(filename)s - %(levelname)s - %(message)s"
+            )
+    root_logger = logging.getLogger()
+    root_logger.setLevel(logging.DEBUG)
+
+
 def create_app(test_config=None):
     """ Create and configure the app """
+    init_logger()
+    
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_mapping(
         SECRET_KEY='dev',
@@ -49,5 +60,11 @@ def create_app(test_config=None):
     @app.route('/hello')
     def hello():
         return 'Hello, World!'
+
+    @app.route('/')
+    def landing():
+        return render_template("page.html")
+    
+    game_server.socketio.run(app, debug=True)
 
     return app

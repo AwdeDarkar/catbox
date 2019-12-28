@@ -15,7 +15,7 @@ function ConnectionFormHandler(e)
 	e.preventDefault();
 	code = $("#connection_code").val();
 	username = $("#connection_code").val();
-	socket.emit("join game", {
+	socket.emit("join", {
 		code: code,
 		username: username 
 	});
