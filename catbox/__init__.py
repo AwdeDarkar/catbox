@@ -30,7 +30,7 @@ def create_app(test_config=None):
         SECRET_KEY='dev',
     )
 
-    serv = server.Server(app)
+    game_server = server.Server(app)
 
     if test_config is None:
         # load the instance config, if it exists, when not testing
