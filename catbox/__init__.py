@@ -17,6 +17,7 @@ Setup script for catbox app
 """
 
 import os
+import sys
 import logging
 
 from flask import Flask, render_template
@@ -31,11 +32,16 @@ def init_logger():
             )
     root_logger = logging.getLogger()
     root_logger.setLevel(logging.DEBUG)
+    
+    console_handler = logging.StreamHandler(sys.stdout)
+    console_handler.setFormatter(log_formatter)
+    root_logger.addHandler(console_handler)
 
 
 def create_app(test_config=None):
     """ Create and configure the app """
     init_logger()
+    logging.info("Started...")
     
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_mapping(
