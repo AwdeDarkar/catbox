@@ -24,7 +24,11 @@ function ConnectionFormHandler(e)
 
 function OnPageLoad()
 {
+	console.log("Hello world!");
 	ConnectSocket();
 	var form = $("connection_form").on("submit", ConnectionFormHandler);
 	$("#connection_username").val("").focus();
 }
+
+console.log("hello?");
+OnPageLoad();
