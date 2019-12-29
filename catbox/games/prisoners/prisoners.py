@@ -159,8 +159,8 @@ class Game(game.Game):
         defect_icon_url = self.get_resource_url("defect_icon")
         cooperate_icon_url = self.get_resource_url("cooperate_icon")
         
-        defect_button = "<button onclick='dilemmaInput(\"defect\")'><img src='" + defect_icon_url + "' /> Defect</button>"
-        cooperate_button = "<button onclick='dilemmaInput(\"cooperate\")'><img src='" + cooperate_icon_url + "' /> Cooperate</button>"
+        defect_button = "<button onclick='dilemmaInput(false)'><img src='" + defect_icon_url + "' /> Defect</button>"
+        cooperate_button = "<button onclick='dilemmaInput(true)'><img src='" + cooperate_icon_url + "' /> Cooperate</button>"
 
         html1 = "<h1>You vs " + username2 + "</h1>"
         html2 = "<h1>You vs " + username1 + "</h1>"

@@ -6,7 +6,7 @@ function dilemmaInput (decision) {
 	socket.emit("game msg", {room: room, data: {type: "decision", cooperate: decision}}
 	
 	let tagToReplace = document.querySelector("#content")
-	if (decision == "defect") {
+	if (decision === false) {
 		tagToReplace.innerHTML = "You defected!"
 	}
 	else { 
