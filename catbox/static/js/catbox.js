@@ -36,8 +36,8 @@ function OnPageLoad () { // eslint-disable-line no-unused-vars
 function ClearPage () {
 	console.log("Clearing page")
 	document.body.innerHTML = ""
-	// TODO: maybe have this also create a content div that everything actually
-	// goes in
+	//$("link[href='fileToRemove.css']").remove();
+	$("link").remove();
 }
 
 function DisplayHTML (data) {

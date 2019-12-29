@@ -144,7 +144,7 @@ class Game():
 
         self.display_lobby()
 
-    def display_lobby(self):
+    def display_lobby(self, additional_html=""):
         """ Send a lobby of connected players to the table """
         html = """
             <h1>Lobby for room """ + self.code + """</h1>
@@ -156,6 +156,7 @@ class Game():
             html += "<li>" + username + "</li>"
             
         html += "</ul>"
+        html += additional_html
         
         self.send_table_html(html)
         # self.broadcast_html(html) # TODO debug
