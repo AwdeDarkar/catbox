@@ -26,7 +26,7 @@ import logging
 
 class Game():
     """ Core game class """
-    
+
     name = ""
 
     def __init__(self):
@@ -60,9 +60,9 @@ class Game():
         else:
             logging.info("New player added")
             self.players[username] = sid
-            
+
             self.on_join(username)
-            
+
     def find_username(self, sid):
         """ Get the user with the passed SID """
 
@@ -114,15 +114,15 @@ class Game():
 
     def send_html(self, username, html):
         """ Sends raw html to display to the specified user """
-        self.send(username, "display", {"html":html})
+        self.send(username, "display", {"html": html})
         
     def send_table_html(self, html):
         """ Sends raw html to display on table """
-        self.send_table("display", {"html":html})
+        self.send_table("display", {"html": html})
         
     def broadcast_html(self, html):
         """ Sends raw html to display on every client """
-        self.broadcast("display", {"html":html})
+        self.broadcast("display", {"html": html})
 
     def handle_message(self, username, data):
         """ Receive message from connected client (from username) """

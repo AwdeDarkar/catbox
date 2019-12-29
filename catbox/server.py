@@ -29,13 +29,11 @@ from pathlib import Path
 from flask import Flask, render_template, request
 from flask_socketio import SocketIO
 
-import game
 
-
-def game_tick(game, rest_time):
+def game_tick(newgame, rest_time):
     while True:
         time.sleep(rest_time)
-        game.game_loop()
+        newgame.game_loop()
 
 
 class Server():
@@ -69,8 +67,8 @@ class Server():
             code = self.create_code()
 
         self.games[code] = newgame
-        game.server = self
-        game.code = code
+        newgame.server = self
+        newgame.code = code
 
         logging.info("Creating game timer for game loop...")
         game_timer_thread = threading.Thread(target=game_tick, args=(newgame, 1))
