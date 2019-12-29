@@ -158,6 +158,7 @@ class Game(game.Game):
 
     def on_join(self, username):
         super().on_join(username)
+        self.points[username] = 0
         if username == self.gm:
             logging.info("Sending special join to GM")
             start_button = "<button onclick='startGame()'>Start Game</button>"
@@ -192,9 +193,9 @@ class Game(game.Game):
         table_html = ""
         for player1, player2, outcome in round_results:
             table_html += "<p>{} vs {}: {}</p>\n".format(player1, player2, outcome)
-        self.send_table(table_html, replace="#content")
+        self.send_table_html(table_html, replace="#content")
         for player in self.points:
-            self.send_html(player, "You have %i points" % self.points[player])
+            self.send_html(player, "You have %i points" % self.points[player], replace="#content")
 
     #def display_lobby(self, additional_html=""):
     #    music = self.get_resource_url("song")
