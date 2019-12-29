@@ -14,6 +14,8 @@ function ConnectSocket () {
 	
 	socket.on("clear page", ClearPage)
 	socket.on("display", DisplayHTML)
+	socket.on("load js", AddJS)
+	socket.on("load css", AddCSS)
 }
 
 function ConnectionFormHandler () {
@@ -36,8 +38,27 @@ function OnPageLoad () { // eslint-disable-line no-unused-vars
 function ClearPage () {
 	console.log("Clearing page")
 	document.body.innerHTML = ""
-	// TODO: maybe have this also create a content div that everything actually
-	// goes in
+	//$("link[href='fileToRemove.css']").remove();
+	$("link").remove();
+}
+
+function AddJS (data) {
+	let url = data.url
+	console.log("Adding js at '" + url + "')
+	var script = document.createElement('script');
+	script.type = 'text/javascript';
+	script.src = url;    
+	document.head.appendChild(script);
+}
+
+function AddCSS (data) {
+	let url = data.url
+	console.log("Adding css at '" + url + "')
+	var stylesheet = document.createElement('link');
+	stylesheet.type = 'text/css';
+	stylesheet.href = url;    
+	stylesheet.rel = "stylesheet"
+	document.head.appendChild(stylesheet);
 }
 
 function DisplayHTML (data) {

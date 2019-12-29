@@ -126,6 +126,16 @@ class Game():
         """ Sends raw html to display on every client """
         self.broadcast("display", {"html": html})
 
+    def send_css(self, username, resource_name):
+        """ Tell client to load given resource """
+        url = self.server.ip + ":" + str(self.server.port) + "/" + self.code + "/resource/" + resource_name
+        self.send("load css", {"url":url})
+        
+    def send_js(self, username, resource_name):
+        """ Tell client to load given resource """
+        url = self.server.ip + ":" + str(self.server.port) + "/" + self.code + "/resource/" + resource_name
+        self.send("load js", {"url":url})
+
     def handle_message(self, username, data):
         """ Receive message from connected client (from username) """
         logging.debug("Message receieved from %s : $s", username, data)
@@ -144,7 +154,7 @@ class Game():
 
         self.display_lobby()
 
-    def display_lobby(self):
+    def display_lobby(self, additional_html=""):
         """ Send a lobby of connected players to the table """
         html = """
             <h1>Lobby for room """ + self.code + """</h1>
@@ -156,6 +166,7 @@ class Game():
             html += "<li>" + username + "</li>"
             
         html += "</ul>"
+        html += additional_html
         
         self.send_table_html(html)
-        self.broadcast_html(html) # TODO debug
+        # self.broadcast_html(html) # TODO debug

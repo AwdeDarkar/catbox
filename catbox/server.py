@@ -50,6 +50,9 @@ class Server():
 
         self.games = {}  # associate room codes with game instances
 
+        self.ip = "http://127.0.0.1"
+        self.port = 5000
+
         logging.info("Server initialized")
 
     def create_code(self):
