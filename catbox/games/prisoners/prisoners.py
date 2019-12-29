@@ -18,7 +18,7 @@ Implementation of an iterated prisoner's dilemma for catbox
 
 import logging
 import random
-import enum
+from enum import enum
 
 import game
 import logging
@@ -123,6 +123,29 @@ class Game(game.Game):
         music = self.get_resource_url("song")
         self.send_table_html("<audio src='" + music + "' autoplay loop></audio>", "#audio")
 
+    def on_join(self, username):
+        super().on_join(username)
+        if username == self.players.keys()[0]: # if first player
+            start_button = "<button onclick='startGame()'>Start Game</button>"
+            self.send_html(username, start_button, "#content")
+        self.send_js(username, "primary_js")
+
+    def render_dilemma(self, username1, username2):
+        defect_icon_url = self.get_resource_url("defect_icon")
+        cooperate_icon_url = self.get_resource_url("cooperate_icon")
+        
+        defect_button = "<button onclick='dilemmaInput(\"defect\")'><img src='" + defect_icon_url + "' /> Defect</button>"
+        cooperate_button = "<button onclick='dilemmaInput(\"cooperate\")'><img src='" + cooperate_icon_url + "' /> Cooperate</button>"
+
+        html1 = "<h1>You vs " + username2 + "</h1>"
+        html2 = "<h1>You vs " + username1 + "</h1>"
+        
+        html1 += defect_button + cooperate_button
+        html2 += defect_button + cooperate_button
+
+        self.send_html(username1, html1, "#content")
+        self.send_html(username2, html2, "#content")
+        
     #def display_lobby(self, additional_html=""):
     #    music = self.get_resource_url("song")
     #    super().display_lobby("<audio src='" + music + "' autoplay loop></audio>")

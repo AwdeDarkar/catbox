@@ -6,6 +6,7 @@
 
 var socket
 var connected = false // eslint-disable-line no-unused-vars
+var room = ""
 
 function ConnectSocket () {
     socket = io.connect("http://" + document.domain + ":" + location.port)
@@ -26,6 +27,7 @@ function ConnectionFormHandler () {
         code: code,
         username: username,
     })
+	room = code
 }
 
 function OnPageLoad () { // eslint-disable-line no-unused-vars

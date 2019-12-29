@@ -1,3 +1,6 @@
 name: prisoners
 resources:
   song: "/prisoners/SneakySnooper.mp3"
+  defect_icon: "/prisoners/icon_defect.png"
+  cooperate_icon: "/prisoners/icon_cooperate.png"
+  primary_js: "/prisoners/prisoners.js"
