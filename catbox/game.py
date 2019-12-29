@@ -135,6 +135,7 @@ class Game():
         # logging.debug("Game tick")
         # print(self.players)
         # print(self.table_sid)
+        pass
 
     def on_join(self, username):
         """ Handler that is called when a player joins the game """

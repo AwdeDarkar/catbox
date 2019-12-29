@@ -26,7 +26,7 @@ import time
 import importlib
 from pathlib import Path
 
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, send_from_directory
 from flask_socketio import SocketIO
 
 
@@ -182,6 +182,12 @@ def games_launcher():
 @app.route('/')
 def landing():
     return render_template("page.html")
+
+
+@app.route('/<room>/resource/<resource_name>')
+def serve_resource(room, resource_name):
+    path = server.games[room].config["resources"][resource_name]
+    return send_from_directory("/games", path)
 
 
 @socketio.on('connect')
