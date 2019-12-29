@@ -14,6 +14,8 @@ function ConnectSocket () {
 	
 	socket.on("clear page", ClearPage)
 	socket.on("display", DisplayHTML)
+	socket.on("load js", AddJS)
+	socket.on("load css", AddCSS)
 }
 
 function ConnectionFormHandler () {
@@ -38,6 +40,25 @@ function ClearPage () {
 	document.body.innerHTML = ""
 	//$("link[href='fileToRemove.css']").remove();
 	$("link").remove();
+}
+
+function AddJS (data) {
+	let url = data.url
+	console.log("Adding js at '" + url + "')
+	var script = document.createElement('script');
+	script.type = 'text/javascript';
+	script.src = url;    
+	document.head.appendChild(script);
+}
+
+function AddCSS (data) {
+	let url = data.url
+	console.log("Adding css at '" + url + "')
+	var stylesheet = document.createElement('link');
+	stylesheet.type = 'text/css';
+	stylesheet.href = url;    
+	stylesheet.rel = "stylesheet"
+	document.head.appendChild(stylesheet);
 }
 
 function DisplayHTML (data) {
