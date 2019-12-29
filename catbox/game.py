@@ -158,4 +158,4 @@ class Game():
         html += "</ul>"
         
         self.send_table_html(html)
-        self.broadcast_html(html) # TODO debug
+        # self.broadcast_html(html) # TODO debug
