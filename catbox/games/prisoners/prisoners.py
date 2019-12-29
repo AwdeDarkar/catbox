@@ -18,7 +18,7 @@ Implementation of an iterated prisoner's dilemma for catbox
 
 import logging
 import random
-import enum
+from enum import Enum
 
 import game
 import logging
@@ -32,7 +32,22 @@ class Game(game.Game):
     _rounds = 5
     _round_length = 20
 
-    class result(enum):
+    class state(Enum):
+        """ Game state """
+
+        not_started = 0
+        """ The game has not begun yet """
+
+        in_round = 1
+        """ The game is in the middle of the round """
+
+        inter_round = 2
+        """ The game is in between rounds """
+
+        completed = 3
+        """ The game is over """
+
+    class result(Enum):
         """ There are three possible results of a prisoner's dilemma """
 
         cooperate_cooperate = "cc"
@@ -57,8 +72,9 @@ class Game(game.Game):
         self.current_pairings = []
         self.points = {}
         self.timer = 0
+        self.state = Game.state.not_started
         logging.debug("Inside prisoners game")
-        
+
     def handle_message(self, username, data):
         """ Recieve message data and process it """
         if "type" not in data:
@@ -77,9 +93,21 @@ class Game(game.Game):
             return
         if len(self.history) >= Game._rounds:
             # We've completed all rounds, show the results
+            self.state = Game.state.completed
             pass
             return
+        if self.state == Game.state.inter_round:
+            # Inter round is complete, start round
+            self.current_pairings = []
+            players = list(self.players.keys())
+            while len(players) > 1:
+                player1 = pop_random(players)
+                player2 = pop_random(players)
+                self.current_pairings.append((player1, player2))
+            self.timer = Game._round_length
+            return
         # We are starting a new round and may need to wrap up a previous one
+        self.state = Game.state.inter_round
         round_results = []  # (player1, player2, result[cc|cd|dd])
         if self.current_actions:  # debt notice: what happens if everyone times out?
             for player1, player2 in self.current_pairings:
@@ -111,21 +139,12 @@ class Game(game.Game):
                 round_results.append((player1, player2, outcome))
             self.history.append(round_results)
         self.timer = Game._round_length
-        self.current_pairings = []
-        players = list(self.players.keys())
-        while len(players) > 1:
-            player1 = pop_random(players)
-            player2 = pop_random(players)
-            self.current_pairings.append((player1, player2))
 
     def on_table_join(self):
         super().on_table_join()
         music = self.get_resource_url("song")
         self.send_table_html("<audio src='" + music + "' autoplay loop></audio>", "#audio")
 
-    #def display_lobby(self, additional_html=""):
-    #    music = self.get_resource_url("song")
-    #    super().display_lobby("<audio src='" + music + "' autoplay loop></audio>")
 
 def pop_random(lst):
     """ Pop a random item off the list """
