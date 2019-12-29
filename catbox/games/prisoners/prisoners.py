@@ -172,6 +172,13 @@ class Game(game.Game):
 
         self.send_html(username1, html1, "#content")
         self.send_html(username2, html2, "#content")
+
+    def render_dilemma_table(self):
+        html = "<h1>Round Pairings</h1>"
+        for pairing in self.pairings:
+            html += "<p>" + pairing[0] + " vs " + paring[1] + "</p>"
+
+        self.send_table_html(html, "#content")
         
     #def display_lobby(self, additional_html=""):
     #    music = self.get_resource_url("song")
