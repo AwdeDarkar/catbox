@@ -35,7 +35,7 @@ class Game():
         self.players = {}
 
         self.table_sid = None
-        
+
         logging.info("Game initialized")
 
     def add_player(self, username, sid):
@@ -55,9 +55,12 @@ class Game():
             else:
                 logging.info("User is a reconnect, resetting sid")
                 self.players[username] = sid
+        elif username == "table":
+            self.table_sid = sid
         else:
             logging.info("New player added")
             self.players[username] = sid
+            
             self.on_join(username)
             
     def find_username(self, sid):
@@ -69,7 +72,7 @@ class Game():
             else:
                 logging.error("Username for SID %s not found", sid)
                 return None
-            
+
     def broadcast(self, event, data, include_table=True):
         """ Send an event and possibly a table to all players """
         logging.info("Broadcasting %s", event)
