@@ -109,6 +109,8 @@ class Game(game.Game):
                 self.current_pairings.append((player1, player2))
             self.timer = Game._round_length
             self.state = Game.state.in_round
+            for player1, players in self.current_pairings:
+                self.render_dilemma(player1, player2)
             return
         # We are starting a new round and may need to wrap up a previous one
         self.state = Game.state.inter_round
@@ -172,6 +174,11 @@ class Game(game.Game):
 
         self.send_html(username1, html1, "#content")
         self.send_html(username2, html2, "#content")
+
+    def render_outcome(self, round_results):
+        """ Display the outcome of a round to the table and players """
+
+        table_html = ""
         
     #def display_lobby(self, additional_html=""):
     #    music = self.get_resource_url("song")
