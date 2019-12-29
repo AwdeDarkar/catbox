@@ -131,6 +131,8 @@ class Game():
     def game_loop(self):
         """ The main game loop function called by an external timer thread """
         logging.debug("Game tick")
+        print(self.players)
+        print(self.table_sid)
 
     def on_join(self, username):
         """ Handler that is called when a player joins the game """
