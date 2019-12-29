@@ -82,7 +82,7 @@ class Game(game.Game):
             return
         if data["type"] == "start":
             logging.debug("Game start requested")
-            self.state = Game.state.in_round
+            self.state = Game.state.inter_round
         elif data["type"] == "decision":
             logging.debug("Game decision reached from %s", username)
             if data["cooperate"]:
@@ -91,6 +91,9 @@ class Game(game.Game):
                 self.current_actions[username] = "defect"
 
     def game_loop(self):
+        logging.debug("Game tick, state %s", self.state)
+        if self.state == Game.state.not_started:
+            return
         if self.timer:
             # We are in a round, count down the timer
             self.timer -= 1
@@ -109,6 +112,7 @@ class Game(game.Game):
                 self.current_pairings.append((player1, player2))
             self.timer = Game._round_length
             self.state = Game.state.in_round
+            self.render_dilemma_table()
             for player1, players in self.current_pairings:
                 self.render_dilemma(player1, player2)
             return
@@ -177,8 +181,8 @@ class Game(game.Game):
 
     def render_dilemma_table(self):
         html = "<h1>Round Pairings</h1>"
-        for pairing in self.pairings:
-            html += "<p>" + pairing[0] + " vs " + paring[1] + "</p>"
+        for pairing in self.current_pairings:
+            html += "<p>" + pairing[0] + " vs " + pairing[1] + "</p>"
 
         self.send_table_html(html, "#content")
         
