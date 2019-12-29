@@ -126,14 +126,19 @@ class Game():
         """ Sends raw html to display on every client """
         self.broadcast("display", {"html": html})
 
+    def get_resource_url(self, resource_name):
+        """ Returns the string URL for a given resource """
+        #return self.server.ip + ":" + str(self.server.port) + "/" + self.code + "/resource/" + resource_name
+        return "/" + self.code + "/resource/" + resource_name
+
     def send_css(self, username, resource_name):
         """ Tell client to load given resource """
-        url = self.server.ip + ":" + str(self.server.port) + "/" + self.code + "/resource/" + resource_name
+        url = self.get_resource_url(resource_name)
         self.send("load css", {"url":url})
         
     def send_js(self, username, resource_name):
         """ Tell client to load given resource """
-        url = self.server.ip + ":" + str(self.server.port) + "/" + self.code + "/resource/" + resource_name
+        url = self.get_resource_url(resource_name)
         self.send("load js", {"url":url})
 
     def handle_message(self, username, data):

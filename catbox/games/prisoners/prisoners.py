@@ -17,6 +17,7 @@ Implementation of an iterated prisoner's dilemma for catbox
 """
 
 import game
+import logging
 
 
 class Game(game.Game):
@@ -31,6 +32,8 @@ class Game(game.Game):
         self.history = []
         self.current_actions = {}
         self.current_pairings = []
+        logging.debug("Inside prisoners game")
+        
 
     def handle_message(self, username, data):
         """ Recieve message data and process it """
@@ -42,3 +45,8 @@ class Game(game.Game):
                 self.current_actions[username] = "cooperate"
             else:
                 self.current_actions[username] = "defect"
+
+    def display_lobby(self, additional_html=""):
+        logging.debug("Child lobby being called")
+        music = self.get_resource_url("song")
+        super().display_lobby("<audio src='" + music + "' autoplay loop></audio>")

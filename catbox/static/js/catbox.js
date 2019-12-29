@@ -44,7 +44,7 @@ function ClearPage () {
 
 function AddJS (data) {
 	let url = data.url
-	console.log("Adding js at '" + url + "')
+	console.log("Adding js at '" + url + "'")
 	var script = document.createElement('script');
 	script.type = 'text/javascript';
 	script.src = url;    
@@ -53,7 +53,7 @@ function AddJS (data) {
 
 function AddCSS (data) {
 	let url = data.url
-	console.log("Adding css at '" + url + "')
+	console.log("Adding css at '" + url + "'")
 	var stylesheet = document.createElement('link');
 	stylesheet.type = 'text/css';
 	stylesheet.href = url;    
