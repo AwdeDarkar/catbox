@@ -147,7 +147,8 @@ class Game(game.Game):
 
     def on_join(self, username):
         super().on_join(username)
-        if username == self.players.keys()[0]: # if first player
+        if username == self.gm:
+            logging.info("Sending special join to GM")
             start_button = "<button onclick='startGame()'>Start Game</button>"
             self.send_html(username, start_button, "#content")
         self.send_js(username, "primary_js")

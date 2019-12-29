@@ -34,6 +34,7 @@ class Game():
         self.code = None
         self.players = {}
         self.config = {}
+        self.gm = None
 
         self.table_sid = None
 
@@ -62,6 +63,9 @@ class Game():
             self.display_lobby()
         else:
             logging.info("New player added")
+            if len(self.players) == 0:
+                self.gm = username
+                logging.info("Game GM set to %s", self.gm)
             self.players[username] = sid
 
             self.on_join(username)
@@ -135,12 +139,12 @@ class Game():
     def send_css(self, username, resource_name):
         """ Tell client to load given resource """
         url = self.get_resource_url(resource_name)
-        self.send("load css", {"url":url})
+        self.send(username, "load css", {"url":url})
         
     def send_js(self, username, resource_name):
         """ Tell client to load given resource """
         url = self.get_resource_url(resource_name)
-        self.send("load js", {"url":url})
+        self.send(username, "load js", {"url":url})
 
     def handle_message(self, username, data):
         """ Receive message from connected client (from username) """
@@ -157,7 +161,7 @@ class Game():
         """ Handler that is called when a player joins the game """
         logging.debug("on_join")
         self.send(username, "clear page", {})
-        self.send_html(username, "<h1>Welcome to " + self.code + " " + username + "</h1>")
+        self.send_html(username, "<h1>Welcome to " + self.code + " " + username + "</h1>", "#content")
 
         self.display_lobby()
 
