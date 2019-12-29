@@ -26,6 +26,8 @@ import logging
 
 class Game():
     """ Core game class """
+    
+    name = ""
 
     def __init__(self):
         self.server = None
@@ -56,10 +58,8 @@ class Game():
         else:
             logging.info("New player added")
             self.players[username] = sid
+            self.on_join(username)
             
-            self.send(username, "clear page", {})
-            self.send_html(username, "<h1>Welcome to " + self.code + " " + username + "</h1>")
-
     def find_username(self, sid):
         """ Get the user with the passed SID """
 
@@ -112,6 +112,14 @@ class Game():
     def send_html(self, username, html):
         """ Sends raw html to display to the specified user """
         self.send(username, "display", {"html":html})
+        
+    def send_table_html(self, html):
+        """ Sends raw html to display on table """
+        self.send_table("display", {"html":html})
+        
+    def broadcast_html(self, html):
+        """ Sends raw html to display on every client """
+        self.broadcast("display", {"html":html})
 
     def handle_message(self, username, data):
         """ Receive message from connected client (from username) """
@@ -120,3 +128,26 @@ class Game():
     def game_loop(self):
         """ The main game loop function called by an external timer thread """
         logging.debug("Game tick")
+
+    def on_join(self, username):
+        """ Handler that is called when a player joins the game """
+        self.send(username, "clear page", {})
+        self.send_html(username, "<h1>Welcome to " + self.code + " " + username + "</h1>")
+
+        self.display_lobby()
+
+    def display_lobby(self):
+        """ Send a lobby of connected players to the table """
+        html = """
+            <h1>Lobby for room """ + self.code + """</h1>
+
+            <p>Players:</p>
+            <ul>"""
+
+        for username in self.players:
+            html += "<li>" + username + "</li>"
+            
+        html += "</ul>"
+        
+        self.send_table_html(html)
+        self.broadcast_html(html) # TODO debug
