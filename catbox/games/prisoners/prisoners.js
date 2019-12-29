@@ -4,5 +4,5 @@ function startGame () {
 
 
 function dilemmaInput (decision) {
-	socket.emit("game msg", {room: room, data: {type: "decision", decision: decision}}
+	socket.emit("game msg", {room: room, data: {type: "decision", cooperate: decision}}
 }

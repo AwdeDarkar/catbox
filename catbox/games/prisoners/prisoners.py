@@ -80,7 +80,7 @@ class Game(game.Game):
         if "type" not in data:
             logging.debug("Untyped message receieved from %s : $s", username, data)
             return
-        if data["type"] == "action":
+        if data["type"] == "decision":
             if data["cooperate"]:
                 self.current_actions[username] = "cooperate"
             else:
@@ -94,7 +94,6 @@ class Game(game.Game):
         if len(self.history) >= Game._rounds:
             # We've completed all rounds, show the results
             self.state = Game.state.completed
-            pass
             return
         if self.state == Game.state.inter_round:
             # Inter round is complete, start round
@@ -105,6 +104,7 @@ class Game(game.Game):
                 player2 = pop_random(players)
                 self.current_pairings.append((player1, player2))
             self.timer = Game._round_length
+            self.state = Game.state.in_round
             return
         # We are starting a new round and may need to wrap up a previous one
         self.state = Game.state.inter_round
