@@ -46,7 +46,11 @@ class Game(game.Game):
             else:
                 self.current_actions[username] = "defect"
 
-    def display_lobby(self, additional_html=""):
-        logging.debug("Child lobby being called")
+    def on_table_join(self):
+        super().on_table_join()
         music = self.get_resource_url("song")
-        super().display_lobby("<audio src='" + music + "' autoplay loop></audio>")
+        self.send_table_html("<audio src='" + music + "' autoplay loop></audio>", "#audio")
+
+    #def display_lobby(self, additional_html=""):
+    #    music = self.get_resource_url("song")
+    #    super().display_lobby("<audio src='" + music + "' autoplay loop></audio>")
