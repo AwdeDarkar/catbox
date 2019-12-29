@@ -13,3 +13,7 @@ function dilemmaInput (decision) {
 		tagToReplace.innerHTML = "You cooperated!"
 	}
 }
+
+
+function test() { console.log("Received test communication") }
+socket.on("test", test)

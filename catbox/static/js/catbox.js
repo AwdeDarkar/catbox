@@ -7,6 +7,7 @@
 var socket
 var connected = false // eslint-disable-line no-unused-vars
 var room = ""
+var user = ""
 
 function ConnectSocket () {
     socket = io.connect("http://" + document.domain + ":" + location.port)
@@ -17,6 +18,13 @@ function ConnectSocket () {
 	socket.on("display", DisplayHTML)
 	socket.on("load js", AddJS)
 	socket.on("load css", AddCSS)
+
+	socket.on('reconnect', ()=>{ 
+		socket.emit("join", {
+			code: room,
+			username: user,
+		})
+	});
 }
 
 function ConnectionFormHandler () {
@@ -28,6 +36,7 @@ function ConnectionFormHandler () {
         username: username,
     })
 	room = code
+	user = username
 }
 
 function OnPageLoad () { // eslint-disable-line no-unused-vars
@@ -84,3 +93,5 @@ function DisplayHTML (data) {
 
 console.log("hello?");
 OnPageLoad();
+localStorage.debug = true;
+localStorage.debug = '*';

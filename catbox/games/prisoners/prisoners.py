@@ -92,6 +92,7 @@ class Game(game.Game):
 
     def game_loop(self):
         logging.debug("Game tick, state %s", self.state)
+        #self.broadcast("test", {})
         if self.state == Game.state.not_started:
             return
         if self.timer:

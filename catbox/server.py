@@ -87,6 +87,11 @@ class Server():
     def handle_disconnect(self, request):
         """ Allow clients to disconnect from the server """
         logging.info("Client %s disconnected", request.sid)
+        for game in self.games:
+            for player in game.players:
+                if self.games[game].players[player] == request.sid:
+                    logging.info("Removed %s connection from %s", player, game)
+                    self.games[game].players[player] = None
         self.client_sids.remove(request.sid)
 
     def handle_join(self, data):
@@ -129,12 +134,12 @@ def init_logger():
     """
 
     # mute some things
-    logging.getLogger('socketio').setLevel(logging.CRITICAL)
-    logging.getLogger('socketio.client').setLevel(logging.CRITICAL)
-    logging.getLogger('socketio.server').setLevel(logging.CRITICAL)
-    logging.getLogger('engineio.server').setLevel(logging.CRITICAL)
-    logging.getLogger('engineio.client').setLevel(logging.CRITICAL)
-    logging.getLogger('engineio').setLevel(logging.CRITICAL)
+    # logging.getLogger('socketio').setLevel(logging.CRITICAL)
+    # logging.getLogger('socketio.client').setLevel(logging.CRITICAL)
+    # logging.getLogger('socketio.server').setLevel(logging.CRITICAL)
+    # logging.getLogger('engineio.server').setLevel(logging.CRITICAL)
+    # logging.getLogger('engineio.client').setLevel(logging.CRITICAL)
+    # logging.getLogger('engineio').setLevel(logging.CRITICAL)
 
     log_formatter = logging.Formatter(
             "%(asctime)s - %(filename)s - %(levelname)s - %(message)s"
@@ -236,4 +241,4 @@ def game_msg(data):
 
 
 if __name__ == '__main__':
-    socketio.run(app, debug=False, host='0.0.0.0')
+    socketio.run(app, debug=True, host='0.0.0.0')
