@@ -81,8 +81,10 @@ class Game(game.Game):
             logging.debug("Untyped message receieved from %s : $s", username, data)
             return
         if data["type"] == "start":
+            logging.debug("Game start requested")
             self.state = Game.state.in_round
         elif data["type"] == "decision":
+            logging.debug("Game decision reached from %s", username)
             if data["cooperate"]:
                 self.current_actions[username] = "cooperate"
             else:

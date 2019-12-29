@@ -217,7 +217,7 @@ def join(data):
 
 @socketio.on('game msg')
 def game_msg(data):
-    logging.debug("Flask socket server received game message", data)
+    logging.debug("Flask socket server received game message %s", data)
     room = data["room"]
 
     # check room exists
