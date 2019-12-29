@@ -59,7 +59,7 @@ class Server():
         return "".join([random.choice(string.ascii_uppercase + string.digits) for _ in
                         range(Server._room_code_length)])
 
-    def register_game(self, game):
+    def register_game(self, newgame):
         """ Register the instance of Game with the server and start hosting it """
 
         # search for unused code TODO find a non-evil way of doing this
@@ -68,12 +68,12 @@ class Server():
             logging.debug("Code %s in use, regenerating", code)
             code = self.create_code()
 
-        self.games[code] = game
+        self.games[code] = newgame
         game.server = self
         game.code = code
 
         logging.info("Creating game timer for game loop...")
-        game_timer_thread = threading.Thread(target=game_tick, args=(game, 1))
+        game_timer_thread = threading.Thread(target=game_tick, args=(newgame, 1))
         game_timer_thread.start()
 
         logging.info("Game with code %s created", code)
@@ -117,7 +117,6 @@ class Server():
                 config = yaml.load(f.read())
                 name = config["name"]
             self.installed[name] = importlib.import_module("games.%s.game" % gmod.name)
-            print(self.installed[name])
 
 
 def init_logger():
@@ -167,7 +166,7 @@ def create_game(name):
     newgame.server = server
     server.register_game(newgame)
     logging.info("Game %s created", name)
-    return "Game created " + newgame.code
+    return render_template("table_join.html", code=newgame.code)
 
 
 @app.route('/games')
@@ -175,6 +174,7 @@ def games_launcher():
     """ List of all installed games which may be launched """
     if not server.installed:
         server.load_games()
+    print(server.installed)
     return render_template("games.html", games=list(server.installed.keys()))
 
 

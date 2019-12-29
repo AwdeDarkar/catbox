@@ -33,7 +33,7 @@ class Game():
         self.players = {}
 
         self.table_sid = None
-        
+
         logging.info("Game initialized")
 
     def add_player(self, username, sid):
@@ -53,10 +53,12 @@ class Game():
             else:
                 logging.info("User is a reconnect, resetting sid")
                 self.players[username] = sid
+        elif username == "table":
+            self.table_sid = sid
         else:
             logging.info("New player added")
             self.players[username] = sid
-            
+
             self.send(username, "clear page", {})
             self.send_html(username, "<h1>Welcome to " + self.code + " " + username + "</h1>")
 
@@ -69,7 +71,7 @@ class Game():
             else:
                 logging.error("Username for SID %s not found", sid)
                 return None
-            
+
     def broadcast(self, event, data, include_table=True):
         """ Send an event and possibly a table to all players """
         logging.info("Broadcasting %s", event)
@@ -111,7 +113,7 @@ class Game():
 
     def send_html(self, username, html):
         """ Sends raw html to display to the specified user """
-        self.send(username, "display", {"html":html})
+        self.send(username, "display", {"html": html})
 
     def handle_message(self, username, data):
         """ Receive message from connected client (from username) """
