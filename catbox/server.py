@@ -163,7 +163,7 @@ def create_game(name):
     newgame = server.installed[name].game.Game()
     newgame.server = server
     server.register_game(newgame)
-    logging.info("Game %s created", name)
+    logging.info("Game %s created with code %s", name, newgame.code)
     return render_template("table_join.html", code=newgame.code)
 
 
