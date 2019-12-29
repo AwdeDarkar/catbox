@@ -111,10 +111,11 @@ class Server():
             if gmod.is_file() or "__pycache__" in gmod.name:
                 continue
             name = ""
+            config = {}
             with gmod.joinpath("config.yml").open("r") as f:
                 config = yaml.load(f.read())
                 name = config["name"]
-            self.installed[name] = importlib.import_module("games.%s.game" % gmod.name)
+            self.installed[name] = (config, importlib.import_module("games.%s.game" % gmod.name))
 
 
 def init_logger():
@@ -160,8 +161,10 @@ def hello():
 @app.route('/games/<name>')
 def create_game(name):
     logging.info("Game creation requested")
-    newgame = server.installed[name].game.Game()
+    config, gmod = server.installed[name]
+    newgame = gmod.game.Game()
     newgame.server = server
+    newgame.config = config
     server.register_game(newgame)
     logging.info("Game %s created with code %s", name, newgame.code)
     return render_template("table_join.html", code=newgame.code)

@@ -33,6 +33,7 @@ class Game():
         self.server = None
         self.code = None
         self.players = {}
+        self.config = {}
 
         self.table_sid = None
 
