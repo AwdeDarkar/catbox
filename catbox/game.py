@@ -58,6 +58,7 @@ class Game():
                 self.players[username] = sid
         elif username == "table":
             self.table_sid = sid
+            self.on_table_join()
             self.display_lobby()
         else:
             logging.info("New player added")
@@ -114,26 +115,31 @@ class Game():
             # TODO: add to queue?
             pass
 
-    def send_html(self, username, html):
+    def send_html(self, username, html, replace="body"):
         """ Sends raw html to display to the specified user """
-        self.send(username, "display", {"html": html})
+        self.send(username, "display", {"html": html, "replace":replace})
         
-    def send_table_html(self, html):
+    def send_table_html(self, html, replace="body"):
         """ Sends raw html to display on table """
-        self.send_table("display", {"html": html})
+        self.send_table("display", {"html": html, "replace":replace})
         
-    def broadcast_html(self, html):
+    def broadcast_html(self, html, replace="body"):
         """ Sends raw html to display on every client """
-        self.broadcast("display", {"html": html})
+        self.broadcast("display", {"html": html, "replace":replace})
+
+    def get_resource_url(self, resource_name):
+        """ Returns the string URL for a given resource """
+        #return self.server.ip + ":" + str(self.server.port) + "/" + self.code + "/resource/" + resource_name
+        return "/" + self.code + "/resource/" + resource_name
 
     def send_css(self, username, resource_name):
         """ Tell client to load given resource """
-        url = self.server.ip + ":" + str(self.server.port) + "/" + self.code + "/resource/" + resource_name
+        url = self.get_resource_url(resource_name)
         self.send("load css", {"url":url})
         
     def send_js(self, username, resource_name):
         """ Tell client to load given resource """
-        url = self.server.ip + ":" + str(self.server.port) + "/" + self.code + "/resource/" + resource_name
+        url = self.get_resource_url(resource_name)
         self.send("load js", {"url":url})
 
     def handle_message(self, username, data):
@@ -149,10 +155,16 @@ class Game():
 
     def on_join(self, username):
         """ Handler that is called when a player joins the game """
+        logging.debug("on_join")
         self.send(username, "clear page", {})
         self.send_html(username, "<h1>Welcome to " + self.code + " " + username + "</h1>")
 
         self.display_lobby()
+
+    def on_table_join(self):
+        """ Handler that is called when the table joins the game """
+        logging.debug("on_table_join")
+        self.send_table("clear page", {})
 
     def display_lobby(self, additional_html=""):
         """ Send a lobby of connected players to the table """
@@ -168,5 +180,5 @@ class Game():
         html += "</ul>"
         html += additional_html
         
-        self.send_table_html(html)
+        self.send_table_html(html, "#content")
         # self.broadcast_html(html) # TODO debug

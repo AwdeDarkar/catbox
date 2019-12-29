@@ -118,7 +118,7 @@ class Server():
             with gmod.joinpath("config.yml").open("r") as f:
                 config = yaml.load(f.read())
                 name = config["name"]
-            self.installed[name] = (config, importlib.import_module("games.%s.game" % gmod.name))
+            self.installed[name] = (config, importlib.import_module("games." + gmod.name + "." + gmod.name))
 
 
 def init_logger():
@@ -165,7 +165,7 @@ def hello():
 def create_game(name):
     logging.info("Game creation requested")
     config, gmod = server.installed[name]
-    newgame = gmod.game.Game()
+    newgame = gmod.Game()
     newgame.server = server
     newgame.config = config
     server.register_game(newgame)
@@ -189,8 +189,10 @@ def landing():
 
 @app.route('/<room>/resource/<resource_name>')
 def serve_resource(room, resource_name):
+    logging.debug("Resource '%s' requested", resource_name)
     path = server.games[room].config["resources"][resource_name]
-    return send_from_directory("/games", path)
+    logging.debug("Resource '%s' path: %s", resource_name, path)
+    return send_from_directory("games", path[1:])
 
 
 @socketio.on('connect')

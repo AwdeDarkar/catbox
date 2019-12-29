@@ -40,11 +40,19 @@ function ClearPage () {
 	document.body.innerHTML = ""
 	//$("link[href='fileToRemove.css']").remove();
 	$("link").remove();
+	
+	var contentDiv = document.createElement("div");
+	contentDiv.id = "content";
+	document.body.appendChild(contentDiv);
+	
+	var audioDiv = document.createElement("div");
+	audioDiv.id = "audio";
+	document.body.appendChild(audioDiv);
 }
 
 function AddJS (data) {
 	let url = data.url
-	console.log("Adding js at '" + url + "')
+	console.log("Adding js at '" + url + "'")
 	var script = document.createElement('script');
 	script.type = 'text/javascript';
 	script.src = url;    
@@ -53,7 +61,7 @@ function AddJS (data) {
 
 function AddCSS (data) {
 	let url = data.url
-	console.log("Adding css at '" + url + "')
+	console.log("Adding css at '" + url + "'")
 	var stylesheet = document.createElement('link');
 	stylesheet.type = 'text/css';
 	stylesheet.href = url;    
@@ -63,7 +71,13 @@ function AddCSS (data) {
 
 function DisplayHTML (data) {
 	console.log(data)
-	document.body.innerHTML = data.html
+
+	let tagToReplace = document.querySelector(data.replace)
+	console.log("Replacing content of:");
+	console.log(tagToReplace);
+	
+	//document.body.innerHTML = data.html
+	tagToReplace.innerHTML = data.html
 }
 
 console.log("hello?");

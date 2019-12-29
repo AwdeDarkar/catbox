@@ -21,6 +21,7 @@ import random
 import enum
 
 import game
+import logging
 
 
 class Game(game.Game):
@@ -56,7 +57,8 @@ class Game(game.Game):
         self.current_pairings = []
         self.points = {}
         self.timer = 0
-
+        logging.debug("Inside prisoners game")
+        
     def handle_message(self, username, data):
         """ Recieve message data and process it """
         if "type" not in data:
@@ -116,6 +118,14 @@ class Game(game.Game):
             player2 = pop_random(players)
             self.current_pairings.append((player1, player2))
 
+    def on_table_join(self):
+        super().on_table_join()
+        music = self.get_resource_url("song")
+        self.send_table_html("<audio src='" + music + "' autoplay loop></audio>", "#audio")
+
+    #def display_lobby(self, additional_html=""):
+    #    music = self.get_resource_url("song")
+    #    super().display_lobby("<audio src='" + music + "' autoplay loop></audio>")
 
 def pop_random(lst):
     """ Pop a random item off the list """
