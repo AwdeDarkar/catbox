@@ -144,6 +144,7 @@ class Game(game.Game):
                         self.points[player2] += points2
                 round_results.append((player1, player2, outcome))
             self.history.append(round_results)
+            self.render_outcome(round_results)
         self.timer = Game._round_length
 
     def on_table_join(self):
@@ -177,9 +178,13 @@ class Game(game.Game):
 
     def render_outcome(self, round_results):
         """ Display the outcome of a round to the table and players """
-
         table_html = ""
-        
+        for player1, player2, outcome in round_results:
+            table_html += "<p>{} vs {}: {}</p>\n".format(player1, player2, outcome)
+        self.send_table(table_html, replace="#content")
+        for player in self.points:
+            self.send_html(player, "You have %i points" % self.points[player])
+
     #def display_lobby(self, additional_html=""):
     #    music = self.get_resource_url("song")
     #    super().display_lobby("<audio src='" + music + "' autoplay loop></audio>")
